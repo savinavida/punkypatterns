@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work | SAVINAVIDA</title>
+    
+    <style>
+        @font-face { font-family: 'JetBrains Mono'; src: url('JetBrainsMono.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+        @font-face { font-family: 'Lora'; src: url('Lora.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+
+        :root {
+            --bg-moss: #DFE5DE;
+            --text-denim: #111111;
+            --accent-bark: #3F3C32;
+            --cta-blue: #0652FF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { 
+            font-family: 'Lora', serif; 
+            background-color: var(--text-denim);
+            color: var(--bg-moss); /* цвет основного текста*/
+            line-height: 2.2; 
+            overflow-x: hidden; 
+            hyphens: auto;
+            cursor: none;
+        }
+
+        h1, h2, h3 { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-weight: 700; 
+            color: var(--bg-moss);  /* цвет заголовков */
+            letter-spacing: -0.5px; 
+        }
+
+        p { max-width: 600px; text-align: justify; }
+        
+        a { 
+            color: var(--bg-moss); 
+            text-decoration: none; 
+            position: relative; 
+            display: inline-block;
+        }
+        a::after { 
+            content: ''; 
+            position: absolute; 
+            width: 100%; 
+            height: 2px; 
+            bottom: -2px; 
+            left: 0; 
+            background-color: var(--cta-blue); 
+            transform: scaleX(0); 
+            transition: transform 0.3s ease; 
+            transform-origin: right; 
+        }
+        a:hover::after { 
+            transform: scaleX(1); 
+            transform-origin: left; 
+        }
+
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+        }
+
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 80px; 
+            padding-bottom: 20px; 
+            border-bottom: 1px solid var(--bg-moss);
+        }
+
+        nav a { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 14px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            color: var(--bg-moss); 
+            margin-left: 20px; 
+            transition: color 0.3s ease;
+        }
+        nav a:hover { color: var(--cta-blue); }
+
+        /* кастомный курсор */
+        .cursor-dot, .cursor-outline { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            pointer-events: none; 
+            border-radius: 0%; 
+            opacity: 0; 
+            transform: translate(-50%, -50%); 
+            z-index: 9999; 
+            transition: all 0.05s ease-out; 
+        }
+        .cursor-dot { 
+            width: 6px; 
+            height: 6px; 
+            background-color: var(--bg-moss); 
+        }
+        .cursor-outline { 
+            width: 30px; 
+            height: 30px; 
+            border: 2px solid var(--bg-moss); 
+        }
+        .is-hovered .cursor-outline { 
+            width: 60px; 
+            height: 60px; 
+            border-color: var(--cta-blue); 
+            border-width: 2px; 
+        }
+        .is-hovered .cursor-dot { 
+            width: 10px; 
+            height: 10px; 
+            background-color: var(--cta-blue); 
+        }
+
+        /* СЕКЦИЯ БОЛЬШОЙ ГАЛЕРЕИ */
+        .work-grid {
+            display: grid;
+            /* десктоп: тут жестко 3 колонки от края до края контейнера */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px; /* Карточки расположены близко друг к другу */
+            padding-bottom: 100px;
+        }
+
+        .node-card {
+            position: relative;
+            background-color: transparent;
+            border: 2px solid var(--bg-moss);
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1 / 1; /* очень квадратная карточка */
+            will-change: transform;
+        }
+
+        /* мобильная версия: одна колонка вертикально, проверить! */
+        @media (max-width: 768px) {
+            .work-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .node-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            filter: saturate(0.9);
+            will-change: transform;
+        }
+
+        /* подложка под картинкой (земляной фон) */
+        .node-info-wrap {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(63, 60, 50, 0.9);
+            transform: translateY(100%);
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1;
+        }
+
+        .node-card:hover .node-info-wrap {
+            transform: translateY(0);
+        }
+
+        /* КОНТЕЙНЕР ДЛЯ ТЕКСТА И ССЫЛКИ */
+        .node-info {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+            z-index: 2;
+            color: var(--bg-moss);
+        }
+
+        .card-static h3, .card-static p {
+            margin: 0;
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .card-static h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .card-static p {
+            font-size: 16px;
+            opacity: 0.85;
+        }
+
+        .node-info a {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--cta-blue);
+            font-weight: 700;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+            align-self: flex-start;
+            opacity: 0;
+            transform: translateY(10px);
+            transition-delay: 0.1s;
+        }
+
+        /* АНИМАЦИЯ ПРИ ХОВЕРЕ */
+        .node-card:hover .card-static h3,
+        .node-card:hover .card-static p,
+        .node-card:hover .node-info a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* картинка уезжает в правый нижний угол, оставаясь чуть видимой */
+        .node-card:hover img {
+            transform: translate(calc(100% - 40px), calc(100% - 40px)) scale(0.8);
+            filter: brightness(0.5) contrast(1.1);
+        }
+
+        /* ФУТЕР */
+        footer.container {
+            padding-top: 80px;
+            padding-bottom: 60px;
+            border-top: 1px solid var(--bg-moss);
+        }
+        .footer-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 40px;
+        }
+        .made-on p { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 12px; 
+            color: var(--bg-moss); 
+            letter-spacing: 1px;
+            max-width: 200px;
+        }
+        .tg-btn {
+            position: relative;
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--cta-blue);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 4px 4px 0 var(--cta-blue);
+            flex-shrink: 0;
+        }
+        .tg-btn:hover { 
+            transform: translate(-4px, -4px); 
+            box-shadow: 8px 8px 0 var(--cta-blue); 
+        }
+        .tg-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .tg-icon-wrap {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            background-color: white;
+            padding: 6px;
+            border-radius: 50%;
+            border: 2px solid var(--cta-blue);
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+        .tg-btn:hover .tg-icon-wrap { transform: scale(1.1); }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 20px; padding-top: 40px; text-align: center; }
+            nav { justify-content: center; flex-wrap: wrap; }
+            nav a, .btn-lang { margin-left: 0 !important; margin-right: 15px; margin-bottom: 10px; }
+            .footer-flex { flex-direction: column; align-items: flex-start; gap: 30px; }
+        }
+    </style>
+</head>
+<body class="is-hovered">
+
+<div class="cursor-dot"></div>
+<div class="cursor-outline"></div>
+
+<header class="container">
+    <h1>THE WORDS' DARKROOM</h1>
+    <nav>
+        <a href="index.html">ENGLISH HOMEPAGE</a>
+        <a href="ru.html">РУССКАЯ ГЛАВНАЯ</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section id="portfolio">
+        <h2 style="margin-bottom: 40px;">DARIA’S DARLINGS</h2>
+        <div class="work-grid">
+
+            <div class="node-card">
+                <img src="work_1.png" alt="Описание проекта 1">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>PIFURIKI. ✿ THE TEXT<br>ADVENTURE I'VE MADE.<br><br><br>ПИФУРИКИ. ✿ КВЕСТ, ПРИДУМАННЫЙ МНОЙ.<br></h3>
+                    </div>
+                    <a href="case_1.html" target="_blank">READ ABOUT IT &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_2.png" alt="Описание проекта 2">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>DIY BILINGUAL PORTFOLIO ON NEOCITIES<br><br><br>ДВУЯЗЫЧНОЕ DIY-ПОРТФОЛИО НА NEOCITIES</h3>
+                    </div>
+                    <a href="case_2.html" target="_blank">READ ABOUT IT &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_3.png" alt="Описание проекта 3">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project Three</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_4.png" alt="Описание проекта 4">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project Four</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_5.png" alt="Описание проекта 5">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project Five</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_6.png" alt="Описание проекта 6">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project Six</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_7.png" alt="Описание проекта 7">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project Seven</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_8.png" alt="Описание проекта 8">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project Eight</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_9.png" alt="Описание проекта 9">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project Nine</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_10.png" alt="Описание проекта 10">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project 10</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_11.png" alt="Описание проекта 11">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project 11</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_12.png" alt="Описание проекта 12">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>FINDING THE RIGHT WORDS FOR THE BRAND<br><br><br>ПОИСК ТЕХ САМЫХ СЛОВ ДЛЯ БРЕНДА</h3>
+                    </div>
+                    <a href="https://www.behance.net/gallery/238433681/Stels-Branding-Strategy" target="_blank">BEHANCE &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_13.png" alt="Описание проекта 13">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project 13</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_14.png" alt="Описание проекта 14">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>ANALYTICS & COPYWRITING FOR EV GURUS<br><br><br>АНАЛИТИКА И КОПИРАЙТ ДЛЯ ГУРУ ЭЛЕКТРОМОБИЛЕЙ</h3>
+                    </div>
+                    <a href="https://www.behance.net/gallery/214064421/Frank-Auto-rebranding?tracking_source=project_owner_other_projects" target="_blank">BEHANCE &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_15.png" alt="Описание проекта 15">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project 15</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_16.png" alt="Описание проекта 16">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>Project 16</h3>
+                    </div>
+                    <a href="#" target="_blank">SOON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_17.png" alt="Описание проекта 17">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>REBRAND AND STORYTELL<br><br><br>РЕБРЕНДИНГ + СТОРИТЕЛЛИНГ</h3>
+                    </div>
+                    <a href="https://youtu.be/8nyHSnX1dP8" target="_blank">YOUTUBE &rarr;</a>
+                </div>
+            </div>
+
+            <div class="node-card">
+                <img src="work_18.png" alt="Описание проекта 18">
+                <div class="node-info-wrap"></div>
+                <div class="node-info">
+                    <div class="card-static">
+                        <h3>CREATE A BRAND NEW BRAND WITH LOVE<br><br><br>БОЛЬШОЙ КОМАНДОЙ СОЗДАЛИ БРЕНД ПО ЛЮБВИ</h3>
+                    </div>
+                    <a href="https://www.behance.net/gallery/187295461/Gastrovilla-Out-of-town-food-market" target="_blank">BEHANCE &rarr;</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<footer class="container">
+    <div class="footer-flex">
+        <div class="made-on">
+            <img src="neocities.png" alt="Made on neocities.org" style="width: 100px; height: auto; display: block; margin-bottom: 5px;">
+            <p>© 2026 DARIA SAVINA</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // --- управление кастомным курсором ---
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+
+    document.body.addEventListener('mousemove', e => {
+        cursorDot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        cursorOutline.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        cursorDot.style.opacity = 1;
+        cursorOutline.style.opacity = 1;
+    });
+
+    const hoverTargets = document.querySelectorAll('a, .node-card');
+    hoverTargets.forEach(target => {
+        target.addEventListener('mouseenter', () => {
+            document.body.classList.add('is-hovered');
+        });
+        target.addEventListener('mouseleave', () => {
+            document.body.classList.remove('is-hovered');
+        });
+    });
+</script>
+
+</body>
+</html>

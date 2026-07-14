@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAVINAVIDA CREATIVE ROOM</title>
+
+    <style>
+        @font-face {
+            font-family: 'JetBrains Mono';
+            src: url('JetBrainsMono.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Lora';
+            src: url('Lora.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        
+        :root {
+            --bg-moss: #DFE5DE;
+            --text-denim: #111111;
+            --accent-bark: #3F3C32;
+            --cta-blue: #0652FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--bg-moss);
+            color: var(--text-denim);
+            line-height: 2.2; 
+            overflow-x: hidden;
+            hyphens: auto;
+        }
+
+        h1, h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--text-denim);
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            max-width: 600px;
+            text-align: justify;
+        }
+        
+        a {
+            color: var(--text-denim);
+            text-decoration: none;
+            position: relative;
+        }
+        
+        a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--cta-blue);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: right;
+        }
+        a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--accent-bark);
+        }
+
+        nav a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-bark);
+            margin-left: 20px;
+        }
+
+        /* СТЕНА ПРОЕКТОВ */
+        .mindmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .node-card {
+            position: relative;
+            background-color: var(--text-denim); /* Технический черный фон карты */
+            border: 2px solid var(--accent-bark);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            color: white;
+        }
+
+        .node-card:hover {
+            transform: translate(-8px, -8px);
+            box-shadow: 15px 15px 0 var(--cta-blue);
+        }
+
+        .node-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+            z-index: 1;
+            filter: saturate(0.7); 
+        }
+
+        .node-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Слой-подложка под картинкой (земляной) */
+        .node-info-wrap {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 240px;
+            background-color: rgba(63, 60, 50, 0.9); 
+            transform: translateY(100%);
+            transition: transform 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 0;
+        }
+
+        .node-card:hover .node-info-wrap {
+            transform: translateY(0);
+        }
+
+        /* КОНТЕЙНЕР ДЛЯ ВСЕГО ТЕКСТА ВНУТРИ КАРТОЧКИ */
+        .node-info {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Прижимаем контент к низу */
+            padding: 20px;
+            z-index: 2;
+        }
+
+        /* НОВАЯ ЛОГИКА: Статичный текст (заголовок и описание) */
+        .card-static h3,
+        .card-static p {
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .card-static h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .card-static p {
+            font-size: 16px;
+            opacity: 0.85;
+            max-width: 90%;
+        }
+
+        /* НОВАЯ ЛОГИКА: Динамичная ссылка (выезжает только она) */
+        .node-info a {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--cta-blue);
+            font-weight: 700;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+            align-self: flex-start; /* Прижимаем ссылку к левому краю */
+        }
+
+        .node-info a:hover {
+            border-bottom-color: var(--cta-blue);
+            transform: translateX(5px);
+        }
+
+        /* АНИМАЦИЯ ССЫЛКИ: прячем её за край при загрузке */
+        .node-info {
+            transform: translateY(calc(100% - 48px)); 
+            transition: transform 0.4s ease;
+        }
+
+        .node-card:hover .node-info {
+            transform: translateY(0); 
+        }
+
+        /* КНОПКИ ПЕРЕКЛЮЧЕНИЯ ЯЗЫКОВ (исправлено на крупный размер) */
+        .lang-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-lang {
+            background: transparent;
+            border: 1px solid var(--accent-bark);
+            padding: 10px 20px; 
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-lang.active {
+            background-color: var(--cta-blue);
+            color: white;
+            border-color: var(--cta-blue);
+            cursor: default;
+        }
+
+        .btn-lang:not(.active):hover {
+            background-color: var(--cta-blue);
+            color: white;
+            border-color: var(--cta-blue);
+            transform: translateY(-2px);
+        }
+
+        /* ФУТЕР — АСИММЕТРИЯ */
+        .footer {
+            padding-top: 80px;
+            padding-bottom: 60px;
+        }
+
+        .footer-flex {
+            display: flex;
+            justify-content: space-between; /* Разносим элементы по краям */
+            align-items: flex-end;         /* Выравниваем по нижнему краю аватарки */
+            gap: 40px;                     /* Воздух между текстом и кнопкой */
+        }
+
+        .made-on p {
+            text-align: left !important;   /* Принудительно выравниваем текст влево */
+            max-width: 200px;              /* Ограничиваем длину строки для читаемости */
+        }
+
+        /* СТИЛИ ДЛЯ КНОПКИ ТЕЛЕГРАМ */
+        .tg-btn {
+            position: relative;
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--cta-blue);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 4px 4px 0 var(--cta-blue);
+        }
+
+        .tg-btn:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 var(--cta-blue);
+        }
+
+        .tg-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .tg-icon-wrap {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            background-color: white;
+            padding: 6px;
+            border-radius: 50%;
+            border: 2px solid var(--cta-blue);
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .tg-btn:hover .tg-icon-wrap {
+            transform: scale(1.1);
+        }
+
+        .tg-icon {
+            width: 20px;
+            height: 20px;
+            display: block;
+            fill: var(--cta-blue);
+        }
+
+        /* АДАПТИВ: НА МОБИЛКЕ СТАВИМ ВСЁ В СТОЛБЕЦ */
+        @media (max-width: 768px) {
+            .footer-flex {
+                flex-direction: column;
+                align-items: flex-start; /* На телефоне всё прижимается к левому краю */
+                gap: 30px;
+            }
+            
+            .made-on p {
+                text-align: left !important;
+            }
+        }
+        
+        /* Кастомный курсор */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            border-radius: 0%;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+            z-index: 9999;
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-bark); 
+        }
+
+        .cursor-outline {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--accent-bark); 
+        }
+
+        .is-hovered .cursor-outline {
+            width: 60px;
+            height: 60px;
+            border-color: var(--cta-blue);
+            border-width: 2px;
+        }
+
+        .is-hovered .cursor-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--cta-blue);
+            border-radius: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                padding-top: 40px;
+                text-align: center;
+            }
+
+            nav {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            
+            nav a, .btn-lang {
+                margin-left: 0 !important;
+                margin-right: 15px;
+                margin-bottom: 10px;
+            }
+
+            .mindmap-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding-bottom: 80px;
+            }
+
+            .node-card img {
+                height: 250px;
+            }
+
+            .container {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <header class="container">
+        <h1>ДАШИНЫ БУНТАРСКИЕ МОТИВЫ</h1>
+        <nav>
+            <div class="lang-group">
+                <button class="btn-lang">ENG</button>
+                <button class="btn-lang active">РУС</button>
+            </div>
+            <a href="daria.html">ДАРЬЯ</a>
+            <a href="#contact">КОНТАКТЫ</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section id="portfolio">
+            <h2 style="margin-bottom: 40px;">БЛА-БЛА-БЛА НАПОКАЗ</h2>
+            <div class="mindmap-grid">
+
+                <!-- Карточка 1 -->
+                <div class="node-card">
+                    <img src="dashaflowers.jpeg" alt="фото даши с цветами">
+                    <div class="node-info-wrap"></div>
+                    <div class="node-info">
+                        <div class="card-static">
+                            <h3>ТРУД.</h3>
+                            <p>Нырнуть в креатив и эксперименты</p>
+                        </div>
+                        <a href="work.html" style="color: var(--cta-blue); font-weight: bold;">ВОЙТИ &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- Карточка 2 -->
+                <div class="node-card">
+                    <img src="wordslogocity.png" alt="лого хрупких слов мелкий шрифт city">
+                    <div class="node-info-wrap"></div>
+                    <div class="node-info">
+                        <div class="card-static">
+                            <h3>ТЕКСТЫ.</h3>
+                            <p>Проследить нарративы и сюжеты</p>
+                        </div>
+                        <a href="texts.html" style="color: var(--cta-blue); font-weight: bold;">ЧИТАТЬ &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- Карточка 3 -->
+                <div class="node-card">
+                    <img src="pifuriki_by_savina_daria.png" alt="базовая обложка игры с пифуриками">
+                    <div class="node-info-wrap"></div>
+                    <div class="node-info">
+                        <div class="card-static">
+                            <h3>ПИФУРИКИ.</h3>
+                            <p>Увлечься текстовым квестом</p>
+                        </div>
+                        <a href="https://savinavida.github.io/pifuriki_by_savina_daria/" target="_blank" style="color: var(--cta-blue); font-weight: bold;">ИГРАТЬ &rarr;</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
+    <!-- ФУТЕР С КНОПКАМИ -->
+    <footer class="container">
+        
+        <div class="footer-flex">
+            <!-- Левый блок: Текст про Neocities -->
+            <div class="made-on">
+                <img src="neocities.png" alt="Made on neocities.org" style="width: 100px; height: auto; display: block; margin-bottom: 5px;">
+                <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-bark); letter-spacing: 1px;">© 2026 DARIA SAVINA</p>
+            </div>
+
+            <!-- Правый блок: Кнопка Телеграм -->
+            <a href="https://t.me/твой_адрес_канала" target="_blank" class="tg-btn">
+                <div class="tg-avatar">
+                    <img src="avatar.jpg" alt="My face">
+                </div>
+                <div class="tg-icon-wrap">
+                    <img src="tglogo.png" alt="Telegram" class="tg-icon">
+                </div>
+            </a>
+        </div>
+
+    </footer>
+    </main>
+
+<script>
+    // Переключение языков
+    const engBtn = document.querySelector('.lang-group button:nth-child(1)');
+    const rusBtn = document.querySelector('.lang-group button:nth-child(2)');
+
+    // При клике на ENG проверяем, активна ли она
+    engBtn.addEventListener('click', function(event) {
+        if (!engBtn.classList.contains('active')) {
+            window.location.href = 'index.html';
+        } else {
+            event.preventDefault(); // Останавливаем событие, если кнопка уже активна
+        }
+    });
+
+    // При клике на РУС просто идем на русскую версию
+    rusBtn.addEventListener('click', function() {
+        window.location.href = 'ru.html';
+    });
+
+    // --- Управление кастомным курсором ---
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+
+    document.body.addEventListener('mousemove', e => {
+        cursorDot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        cursorOutline.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        cursorDot.style.opacity = 1;
+        cursorOutline.style.opacity = 1;
+    });
+
+    const hoverTargets = document.querySelectorAll('a, .node-card');
+    
+    hoverTargets.forEach(target => {
+        target.addEventListener('mouseenter', () => {
+            document.body.classList.add('is-hovered'); // Появляются синие контуры
+        });
+        target.addEventListener('mouseleave', () => { // Убрал лишнюю ()
+            document.body.classList.remove('is-hovered');
+        });
+    });
+</script>
+</body>
+</html>

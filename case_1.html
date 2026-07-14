@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work | SAVINAVIDA</title>
+    
+    <style>
+        @font-face {
+            font-family: 'JetBrains Mono';
+            src: url('JetBrainsMono.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Lora';
+            src: url('Lora.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        :root {
+            --bg-moss: #DFE5DE;  
+            --text-denim: #111111;
+            --accent-bark: #3F3C32;
+            --cta-blue: #0652FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: #C3CFC1;
+            color: var(--accent-bark);
+            line-height: 2.2;
+            overflow-x: hidden;
+            hyphens: auto;
+            cursor: none;
+        }
+
+        h1, h2, h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--cta-blue);
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            max-width: 600px;
+            text-align: justify;
+        }
+
+        a {
+            color: var(--accent-bark);
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--cta-blue);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: right;
+        }
+
+        a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--bg-moss);
+        }
+
+        nav a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--bg-moss);
+            margin-left: 20px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--cta-blue);
+        }
+
+        /* кастомный курсора */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            border-radius: 0%;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: all 0.05s ease-out;
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--bg-moss);
+        }
+
+        .cursor-outline {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--bg-moss);
+        }
+
+        .is-hovered .cursor-outline {
+            width: 60px;
+            height: 60px;
+            border-color: var(--cta-blue);
+            border-width: 2px;
+        }
+
+        .is-hovered .cursor-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--cta-blue);
+        }
+
+        /* контейнер для кейсов и концептов */
+        .case-study-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+        }
+
+        /* отдельные блоки */
+        .case-step {
+            flex-basis: calc(50% - 30px);
+            max-width: 450px;
+            position: relative;
+            padding: 20px;
+            border: 2px solid var(--cta-blue);
+            aspect-ratio: 1 / 1;
+            transition: all 0.3s ease;
+            background-color: var(--bg-moss);
+        }
+
+        .case-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .case-step h3 {
+            margin: 0 auto 10px; /* центрируем заголовок по горизонтали */
+            text-align: center; /* центрирование текста заголовка */
+        }
+
+        .case-step p {
+            max-width: 100%;
+            text-align: center; /* Центрирование абзаца */
+        }
+
+        /* круглые блоки */
+        .case-step-circle {
+            border-radius: 50%;
+        }
+
+        /* линия соединения этапов */
+        .connector-line {
+            position: relative;
+            width: 100%;
+            height: 2px;
+            background-color: var(--cta-blue);
+            margin-top: 30px;
+        }
+
+        /* Украшения концов линий */
+        .connector-line::before,
+        .connector-line::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--cta-blue);
+            border-radius: 50%;
+        }
+
+        .connector-line::before {
+            left: 0;
+        }
+
+        .connector-line::after {
+            right: 0;
+        }
+
+        /* нижний колонтитул */
+        footer.container {
+            padding-top: 80px;
+            padding-bottom: 60px;
+            border-top: 1px solid var(--bg-moss);
+        }
+
+        .footer-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 40px;
+        }
+
+        .made-on p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--bg-moss);
+            letter-spacing: 1px;
+            max-width: 200px;
+        }
+
+        /* Медиа-запросы для мобильной версии */
+        @media (max-width: 768px) {
+            .case-step {
+                flex-basis: 100%;
+                max-width: 100%;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 20px;
+                padding-top: 40px;
+                text-align: center;
+            }
+
+            nav {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            nav a {
+                margin-left: 0 !important;
+                margin-right: 15px;
+                margin-bottom: 10px;
+            }
+
+            .footer-flex {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <header class="container">
+        <h1>PIFURIKI. THE TEXT ADVENTURE</h1>
+        <nav>
+            <a href="work.html">THE WORDS' DARKROOM</a>
+            <a href="work.html">ВЕРНУТЬСЯ НАЗАД</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="case-study-container">
+            <!-- Первый этап: старт -->
+            <div class="case-step case-step-circle">
+                <h3>1. Start</h3>
+                <p>[EN]<br>I had the idea to turn a story "Pifuriki" I made up<br>into a non-linear interactive fiction.<br><br>[RU]<br>У меня родилась идея превратить придуманную мной историю "Пифурики" в нелинейную интерактивную литературу.<br>✿</p>
+            </div>
+
+            <!-- Второй этап: описание проекта -->
+            <div class="case-step">
+                <h3>2. About Project</h3>
+                <p>[EN]<br>I decided to bring this project to life on Twine all on my own. Huge thanks to Kristina Kolesnikova and Elena Kudelina for the spark and mentorship.<br><br>[RU]<br>Решила сама собрать проект на Twine. За заряд вдохновения и менторство благодарю Кристину Колесникову и Елену Куделину.</p>
+            </div>
+
+            <!-- Линия соединения -->
+            <div class="connector-line"></div>
+
+            <!-- Третий этап: трудности -->
+            <div class="case-step">
+                <h3>3. Difficulties</h3>
+                <p>[EN]<br>With zero coding background and no experience in Twine, I used AI as a tech assistant. It helped me to sprint my way into the world of frontend.<br><br>[RU]<br>Я никогда не имела дела с Twine. Решила использовать ИИ как тех. ассистента, чтобы с ходу вникнуть во фронтенд.</p>
+            </div>
+
+            <!-- Четвертый этап: процесс и решение -->
+            <div class="case-step">
+                <h3>4. Process & Solution</h3>
+                <p>[EN]<br>It took over a month to build the RU version. I wrote the story, dialogues, and branching paths, while AI helped code the chat UI, animate the nauseating words, and balance the stats.<br><br>[RU]<br>На RU-версию ушел месяц. Я написала текст, диалоги, механику, ветки, а ИИ помог нарисовать чат, укачивающие слова, посчитать статы.</p>
+            </div>
+
+            <!-- Линия соединения -->
+            <div class="connector-line"></div>
+
+            <!-- Пятый этап: финиш -->
+            <div class="case-step case-step-circle">
+                <h3>5. Finish</h3>
+                <p>[EN]<br>I cut out all the extra noise and dropped the media files. This turned the text itself into both the story and a piece of visual storytelling. Mind-blowing!<br><br>[RU]<br>В процессе я отсекла лишнее, отказалась от медиафайлов. В итоге сам текст стал объектом визуального сторителлинга. Обалденно!<br>✿</p>
+            </div>
+
+            <!-- Шестой этап: рефлексия -->
+            <div class="case-step case-step-circle">
+                <h3>6. Reflection</h3>
+                <p>[EN]<br>The process was tough with all the technical quirks, but it was absolutely worth it. Eng version soon.<br><br>[RU]<br>Было непросто постоянно отвлекаться на технические нюансы, но оно того стоило.<br>Скоро будет англ. версия.<br>✿</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Нижняя часть страницы -->
+    <footer class="container">
+        <div class="footer-flex">
+            <div class="made-on">
+                <img src="neocities.png" alt="Made on neocities.org" style="width: 100px; height: auto; display: block; margin-bottom: 5px;">
+                <p>© 2026 DARIA SAVINA</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипт для обработки поведения курсора и анимации иконок -->
+    <script>
+        // Перемещаем кастомный курсор вместе с мышью
+        document.body.addEventListener('mousemove', e => {
+            document.querySelector('.cursor-dot').style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            document.querySelector('.cursor-outline').style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            document.querySelector('.cursor-dot').style.opacity = 1;
+            document.querySelector('.cursor-outline').style.opacity = 1;
+        });
+
+        // Меняем вид курсора при наведении на кликабельные элементы
+        const hoverTargets = document.querySelectorAll('a, .case-step');
+        hoverTargets.forEach(target => {
+            target.addEventListener('mouseenter', () => {
+                document.body.classList.add('is-hovered');
+            });
+            target.addEventListener('mouseleave', () => {
+                document.body.classList.remove('is-hovered');
+            });
+        });
+    </script>
+</body>
+</html>

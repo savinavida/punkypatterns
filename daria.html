@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARIA | SAVINAVIDA CREATIVE ROOM</title>
+    
+    <style>
+        @font-face { 
+            font-family: 'JetBrains Mono'; 
+            src: url('JetBrainsMono.ttf') format('truetype'); 
+        }
+        @font-face { 
+            font-family: 'Lora'; 
+            src: url('Lora.ttf') format('truetype'); 
+        }
+
+        :root {
+            --bg-moss: #DFE5DE;
+            --text-denim: #111111;
+            --accent-bark: #3F3C32;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { 
+            font-family: 'Lora', serif; 
+            background-color: var(--bg-moss); 
+            color: var(--text-denim);
+            line-height: 2.2;
+            overflow-x: hidden;
+        }
+
+        h1, h2 { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-weight: 700; 
+            color: var(--text-denim); 
+            letter-spacing: -0.5px; 
+        }
+
+        a { 
+            color: var(--text-denim); 
+            text-decoration: none; 
+            position: relative; 
+        }
+        a::after { 
+            content: ''; 
+            position: absolute; 
+            width: 100%; 
+            height: 2px; 
+            bottom: -2px; 
+            left: 0; 
+            background-color: var(--accent-bark); 
+            transform: scaleX(0); 
+            transition: transform 0.3s ease; 
+            transform-origin: right; 
+        }
+        a:hover::after { 
+            transform: scaleX(1); 
+            transform-origin: left; 
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 80px; 
+            padding-bottom: 20px; 
+            border-bottom: 1px solid var(--accent-bark); 
+        }
+
+        nav a { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 14px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            color: var(--accent-bark); 
+            margin-left: 20px; 
+        }
+
+        .hero-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1848 / 1268; /* Высота! она теперь зависит от ширины контента, разберись, почему белое */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: transparent;
+            max-height: 90vh; /* Ограничиваем макс высоту, чтобы на мониторах картинка не стала гигантской */
+        }
+        
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            user-select: none; /* здесь убрала max-width и max-height */
+        }
+
+        footer {
+            padding-top: 80px;
+            padding-bottom: 60px;
+            margin-top: 80px;
+            border-top: 1px solid var(--accent-bark);
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent-bark);
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            header { 
+                flex-direction: column; 
+                gap: 20px; 
+                padding-top: 40px; 
+                text-align: center; 
+            }
+            nav a { 
+                margin-left: 0 !important; 
+                margin-right: 15px; 
+                margin-bottom: 10px; 
+            }
+            .hero-wrapper { 
+                aspect-ratio: 1848 / 1268; /* На мобильных устройствах задаем высоту относительно экрана, но сохраняем пропорции */
+                height: 60vh;
+                max-height: unset; /* нет ограничение высоты для мобильников */
+            }
+            footer { 
+                padding-top: 60px; 
+                padding-bottom: 40px; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="container">
+    <h1>Instead of About Me</h1>
+    <nav>
+        <a href="index.html">← ENGLISH HOMEPAGE</a>
+        <a href="ru.html">← ГЛАВНАЯ НА РУССКОМ</a>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="hero-wrapper">
+        <img id="bigImage" src="component88.jpg" alt="Daria project main view" class="hero-image">
+    </div>
+</main>
+
+<footer>
+    © 2026 DARIA SAVINA
+</footer>
+
+</body>
+</html>

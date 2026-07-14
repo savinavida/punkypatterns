@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiction for Starters | Проза и вариации</title>
+
+    <style>
+        @font-face {
+            font-family: 'JetBrains Mono';
+            src: url('JetBrainsMono.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Lora';
+            src: url('Lora.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        
+        :root {
+            --bg-moss: #DFE5DE;
+            --text-denim: #111111;
+            --accent-bark: #3F3C32;
+            --cta-blue: #0652FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--bg-moss);
+            color: var(--text-denim);
+            line-height: 2.2;
+            overflow-x: hidden;
+            hyphens: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--text-denim);
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+
+        /* Основная сетка страницы */
+        main.container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 60px;
+        }
+
+        /* Шапка */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--accent-bark);
+        }
+
+        nav a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacity: 1px;
+            color: var(--accent-bark);
+            margin-left: 20px;
+        }
+
+        /* Общая коробка для оглавлений */
+        .sidebars-wrapper {
+            position: sticky;
+            top: 40px;
+            height: 500px; /* Высота коробки */
+            overflow-y: auto; /* Прокрутка внутри */
+            padding-right: 10px; /* Компенсируем полосу прокрутки */
+            border-left: 1px solid var(--accent-bark);
+        }
+
+        .sidebar-nav {
+          /* Убираем устаревшие стили */
+            position: static;
+            height: auto;
+            border-left: none;
+        }
+
+        .sidebar-nav__ru {
+            margin-top: 20px;
+            border-top: 1px solid var(--accent-bark);
+        }
+
+        .sidebar-nav a {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            padding: 8px 0;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--cta-blue);
+        }
+        
+        .sidebars-wrapper::-webkit-scrollbar {
+            width: 8px;
+        }
+        .sidebars-wrapper::-webkit-scrollbar-thumb {
+            background-color: var(--accent-bark);
+            border-radius: 4px;
+        }
+
+        /* Аннотации (тонкая пунктирная линия) */
+        .annotation {
+            border-bottom: 1px dashed var(--accent-bark);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Белая плашка для абзацев (можно отключить) */
+        .block-quote {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 40px;
+        }
+
+        /* Стилизация внутренних ссылок */
+        a.internal-link {
+            color: var(--cta-blue);
+            text-decoration: underline dotted 2px;
+        }
+
+        a.internal-link:hover {
+            text-decoration: underline solid 2px;
+        }
+
+        /* Разделение блоков (декор) */
+        hr.decoration {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-bark), transparent);
+            margin: 60px 0;
+            margin-left: 50%
+        }
+
+        /* Медиа-запросы */
+        @media (max-width: 768px) {
+            main.container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <header class="container">
+        <h1>NARRATIVE & CRAFT | НАРРАТИВЫ И СЮЖЕТЫ</h1>
+        <nav>
+            <!-- Двойная ссылка на главную -->
+            <a href="index.html">ENGLISH HOMEPAGE</a>
+            <a href="ru.html">РУССКАЯ ГЛАВНАЯ</a>
+        </nav>
+    </header>
+
+<main class="container">
+    <!-- Общий контейнер для обоих оглавлений -->
+    <div class="sidebars-wrapper">
+        <aside class="sidebar-nav">
+            <a href="#stories-en">STORIES</a>
+            <a href="#process-en">THE KITCHEN</a>
+            <a href="#notes-en">FIELD NOTES</a>
+        </aside>
+
+        <aside class="sidebar-nav sidebar-nav__ru">
+            <a href="#stories-ru">ИСТОРИИ</a>
+            <a href="#process-ru">КУХНЯ</a>
+            <a href="#notes-ru">ЗАМЕТКИ</a>
+        </aside>
+    </div>
+
+        <article>
+            <section id="stories-en">
+                <h2>STORIES</h2>
+                <p class="annotation">Coming Soon</p>
+
+                <p>Text will go here.</p>
+
+                <p>And here there will be a list.</p>
+                <ul>
+                    <li>One</li>
+                    <li>Two</li>
+                    <li>Three</li>
+                </ul>
+
+                <p>May be some Links inside the text like this: <a href="#notes-en" class="internal-link">Jump to Notes</a></p>
+            </section>
+
+            <section id="process-en">
+                <h2>THE KITCHEN</h2>
+                <p class="annotation">Coming Soon</p>
+
+                <p>Text will go here. </p>
+
+                <p>And here.</p>
+            </section>
+
+            <section id="notes-en">
+                <h2>FIELD NOTES</h2>
+                <p class="annotation">Coming Soon</p>
+
+                <p>May be smth about the perfect shade of green, like a rotten apple core. Hex code: <strong>#5A6B52</strong>.</p>
+
+                <div class="block-quote">
+                    <p>Here wil be a quote</p>
+                    <p>— Anonymous, 2026</p>
+                </div>
+
+                <p>Tomorrow's plan: later.</p>
+            </section>
+        </article>
+
+        <!-- ======= ОТДЕЛЯЮЩИЙ БЛОК (ДЕКОР) ========= -->
+        <hr class="decoration">
+
+        <article>
+            <section id="stories-ru">
+                <h2>Название</h2>
+                <p class="annotation">Аннотация</p>
+
+                <p>Сам текст</p>
+
+                <p>Список</p>
+                <ul>
+                    <li>Раз</li>
+                    <li>Два</li>
+                    <li>Три</li>
+                </ul>
+
+                <p>Внутри текста можно оформлять ссылки: <a href="#notes-ru" class="internal-link">Перейти к заметкам</a></p>
+            </section>
+
+            <section id="process-ru">
+                <h2>КУХНЯ</h2>
+                <p class="annotation">Аннотация</p>
+
+                <p>Текст первый</p>
+
+                <p>Продолжение текста</p>
+            </section>
+
+            <section id="notes-ru">
+                <h2>ЗАМЕТКИ</h2>
+                <p class="annotation">Случайные наблюдения.</p>
+
+                <p>Здесь можно написать, например, про идеальный оттенок зеленого. Код цвета: <strong>#5A6B52</strong>. Добавлен в палитру.</p>
+
+                <div class="block-quote">
+                    <p>Здесь будет цитата, почему нет</p>
+                    <p>— Безымянный, 2026</p>
+                </div>
+
+                <p>План на завтра: собрать тексты, которые уже есть сюда.</p>
+            </section>
+        </article>
+    </main>
+
+    <script>
+        // --- Управление кастомным курсором ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        document.body.addEventListener('mousemove', e => {
+            cursorDot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            cursorOutline.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            cursorDot.style.opacity = 1;
+            cursorOutline.style.opacity = 1;
+        });
+
+        const hoverTargets = document.querySelectorAll('a, .node-card');
+        
+        hoverTargets.forEach(target => {
+            target.addEventListener('mouseenter', () => {
+                document.body.classList.add('is-hovered');
+            });
+            target.addEventListener('mouseleave', () => {
+                document.body.classList.remove('is-hovered');
+            });
+        });
+    </script>
+
+</body>
+</html>

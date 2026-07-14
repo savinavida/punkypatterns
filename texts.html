@@ -83,18 +83,16 @@
             margin-left: 20px;
         }
 
-        /* Общая коробка для оглавлений */
         .sidebars-wrapper {
             position: sticky;
             top: 40px;
-            height: 500px; /* Высота коробки */
-            overflow-y: auto; /* Прокрутка внутри */
-            padding-right: 10px; /* Компенсируем полосу прокрутки */
+            height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
             border-left: 1px solid var(--accent-bark);
         }
 
         .sidebar-nav {
-          /* Убираем устаревшие стили */
             position: static;
             height: auto;
             border-left: none;
@@ -126,14 +124,14 @@
             border-radius: 4px;
         }
 
-        /* Аннотации (тонкая пунктирная линия) */
+        /* тонкая пунктирная линия */
         .annotation {
             border-bottom: 1px dashed var(--accent-bark);
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
 
-        /* Белая плашка для абзацев (можно отключить) */
+        /* плашка для абзацев (можно отключить) */
         .block-quote {
             background: white;
             padding: 20px;
@@ -141,7 +139,6 @@
             margin-bottom: 40px;
         }
 
-        /* Стилизация внутренних ссылок */
         a.internal-link {
             color: var(--cta-blue);
             text-decoration: underline dotted 2px;
@@ -151,7 +148,6 @@
             text-decoration: underline solid 2px;
         }
 
-        /* Разделение блоков (декор) */
         hr.decoration {
             border: none;
             height: 1px;
@@ -160,7 +156,6 @@
             margin-left: 50%
         }
 
-        /* Медиа-запросы */
         @media (max-width: 768px) {
             main.container {
                 grid-template-columns: 1fr;
@@ -180,14 +175,12 @@
     <header class="container">
         <h1>NARRATIVE & CRAFT | НАРРАТИВЫ И СЮЖЕТЫ</h1>
         <nav>
-            <!-- Двойная ссылка на главную -->
             <a href="index.html">ENGLISH HOMEPAGE</a>
             <a href="ru.html">РУССКАЯ ГЛАВНАЯ</a>
         </nav>
     </header>
 
 <main class="container">
-    <!-- Общий контейнер для обоих оглавлений -->
     <div class="sidebars-wrapper">
         <aside class="sidebar-nav">
             <a href="#stories-en">STORIES</a>
